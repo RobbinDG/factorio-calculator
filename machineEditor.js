@@ -17,16 +17,19 @@ function getModuleCapacity(machine, level){
 	}
 }
 
-function addModuleListToDropdown(id){
+function addModuleListToDropdown(id, item){
+	var allowProd = ((recipes[item].level == 2 || recipes[item].level == 0) ? true : false);
 	customDropdownAddEntry(id, "effectivity_module");
 	customDropdownAddEntry(id, "effectivity_module_2");
 	customDropdownAddEntry(id, "effectivity_module_3");
 	customDropdownAddEntry(id, "speed_module");
 	customDropdownAddEntry(id, "speed_module_2");
 	customDropdownAddEntry(id, "speed_module_3");
-	customDropdownAddEntry(id, "productivity_module");
-	customDropdownAddEntry(id, "productivity_module_2");
-	customDropdownAddEntry(id, "productivity_module_3");
+	if(allowProd){
+		customDropdownAddEntry(id, "productivity_module");
+		customDropdownAddEntry(id, "productivity_module_2");
+		customDropdownAddEntry(id, "productivity_module_3");
+	}
 }
 
 function displayModuleSlots(machine, level, item){
@@ -42,12 +45,13 @@ function displayModuleSlots(machine, level, item){
 		if(i < topRows){
 			var left = (i + (topRows%2)/2) * slotSize + (i*2 + 1 - (topRows%2)) * padding;
 			document.getElementById("modules").innerHTML += customDropdownInit(left, padding, slotSize, 3);
-			addModuleListToDropdown(customDropdowns.length-1);
+			addModuleListToDropdown(customDropdowns.length-1, item);
 			moduleSlotIds.push(customDropdowns.length-1);
 		}
 		if(i < bottomRows){
 			var left = (i + (bottomRows%2)/2) * slotSize + (i*2 + 1 + (bottomRows%2)) * padding;
 			document.getElementById("modules").innerHTML += customDropdownInit(left, ((slotSize+2) + 3*padding), slotSize, 3);
+			addModuleListToDropdown(customDropdowns.length-1, item);
 			moduleSlotIds.push(customDropdowns.length-1);
 		}
 	}
@@ -58,7 +62,7 @@ function loadMachineEditor(machine, level, item, location){
 
 	// load machine level selector
 	document.getElementById("changeMachineLevel").innerHTML = "<option>No Options</option>";
-	if(machine != "chemical_plant" && machine != "centrifuge" && machine != "offshore_pump"){
+	if(machine != "chemical_plant" && machine != "centrifuge" && machine != "offshore_pump" && machine != "pumpjack"){
 		document.getElementById("changeMachineLevel").innerHTML = document.getElementById(machine).innerHTML;
 	}
 	document.getElementById("changeMachineLevel").selectedIndex = (level-1).toString();

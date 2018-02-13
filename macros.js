@@ -1,6 +1,6 @@
 function craftExceptions(itemF){
 	var objectInput, objectOutput;
-	if(itemF == "petrolium" || itemF == "light_oil" || itemF == "heavy_oil"){
+	if(itemF == "petrolium_gas" || itemF == "light_oil" || itemF == "heavy_oil"){
 		var e = document.getElementById("refinery");
 		var input = "input" + e.options[e.selectedIndex].value;
 		var output = "output" + e.options[e.selectedIndex].value;
