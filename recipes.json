@@ -1,0 +1,237 @@
+{
+	"coal":{
+		"craft_time":1.9,
+		"input":[{"item":"coal_ore_patch", "amount":1}],
+		"output":[{"item":"coal", "amount":1}],
+		"machine":{"type":"mining_drill","level":1},
+		"level":0,
+		"science":0
+	},
+	"stone":{
+		"craft_time":1.9,
+		"input":[{"item":"stone_patch", "amount":1}],
+		"output":[{"item":"stone", "amount":1}],
+		"machine":{"type":"mining_drill","level":1},
+		"level":0,
+		"science":0
+	},"iron_ore":{
+		"craft_time":1.9,
+		"input":[{"item":"iron_ore_patch", "amount":1}],
+		"output":[{"item":"iron_ore", "amount":1}],
+		"machine":{"type":"mining_drill","level":1},
+		"level":0,
+		"science":0
+	},
+	"copper_ore":{
+		"craft_time":1.9,
+		"input":[{"item":"copper_ore_patch", "amount":1}],
+		"output":[{"item":"copper_ore", "amount":1}],
+		"machine":{"type":"mining_drill","level":1},
+		"level":0,
+		"science":0
+	},
+	"uranium_ore":{
+		"craft_time":1.9,
+		"input":[{"item":"uranium_ore_patch", "amount":1}],
+		"output":[{"item":"uranium_ore", "amount":1}],
+		"machine":{"type":"mining_drill","level":1},
+		"level":0,
+		"science":0
+	},
+	"water":{
+		"craft_time":1.9,
+		"input":[{"item":"lake", "amount":1}],
+		"output":[{"item":"water", "amount":1}],
+		"machine":{"type":"offshore_pump","level":1},
+		"level":0,
+		"science":0
+	},
+	"iron_plate":{
+		"craft_time":3.5,
+		"input":[{"item":"iron_ore", "amount":1}],
+		"output":[{"item":"iron_plate", "amount":1}],
+		"machine":{"type":"furnace","level":1},
+		"level":1,
+		"science":0
+	},
+	"copper_plate":{
+		"craft_time":3.5,
+		"input":[{"item":"copper_ore", "amount":1}],
+		"output":[{"item":"copper_plate", "amount":1}],
+		"machine":{"type":"furnace","level":1},
+		"level":1,
+		"science":0
+	},
+	"steel_plate":{
+		"craft_time":17.5,
+		"input":[{"item":"iron_plate", "amount":5}],
+		"output":[{"item":"steel_plate", "amount":1}],
+		"machine":{"type":"furnace","level":1},
+		"level":1,
+		"science":0
+	},
+	"iron_gear":{
+		"craft_time":0.5,
+		"input":[{"item":"iron_plate", "amount":2}],
+		"output":[{"item":"iron_gear", "amount":1}],
+		"machine":{"type":"assembling_machine","level":1},
+		"level":2,
+		"science":0
+	},
+	"copper_wire":{
+		"craft_time":0.5,
+		"input":[{"item":"copper_plate", "amount":1}],
+		"output":[{"item":"copper_wire", "amount":2}],
+		"machine":{"type":"assembling_machine","level":1},
+		"level":2,
+		"science":0
+	},
+	"electronic_circuit":{
+		"craft_time":0.5,
+		"input":[{"item":"iron_plate", "amount":1},{"item":"copper_wire","amount":3}],
+		"output":[{"item":"electronic_circuit", "amount":1}],
+		"machine":{"type":"assembling_machine","level":1},
+		"level":2,
+		"science":0
+	},
+	"advanced_electronic_circuit":{
+		"craft_time":6,
+		"input":[{"item":"electronic_circuit", "amount":2},{"item":"copper_wire","amount":4},{"item":"plastic_bar", "amount":2}],
+		"output":[{"item":"advanced_electronic_circuit", "amount":1}],
+		"machine":{"type":"assembling_machine","level":2},
+		"level":2,
+		"science":0
+	},
+	"processing_unit":{
+		"craft_time":10,
+		"input":[{"item":"electronic_circuit", "amount":20},{"item":"advanced_electronic_circuit","amount":2},{"item":"sulfuric_acid","amount":5}],
+		"output":[{"item":"processing_unit", "amount":1}],	
+		"machine":{"type":"assembling_machine","level":2},
+		"level":2,
+		"science":0
+	},
+	"steam":{
+		"craft_time":0.5,
+		"input":[{"item":"water", "amount":1}],
+		"output":[{"item":"steam", "amount":1}],
+		"machine":{"type":"boiler","level":1},
+		"level":0,
+		"science":0
+	},
+	"crude_oil":{
+		"craft_time":0.5,
+		"input":[{"item":"oil_field", "amount":100}],
+		"output":[{"item":"crude_oil", "amount":50}],
+		"machine":{"type":"pumpjack","level":1},
+		"level":0,
+		"science":0
+	},
+	"petrolium":{
+		"craft_time":5,
+		"input1":[{"item":"crude_oil", "amount":100}],
+		"input2":[{"item":"crude_oil", "amount":100},{"item":"water", "amount":50}],
+		"input3":[{"item":"coal", "amount":10},{"item":"steam", "amount":50}],
+		"output1":[{"item":"petrolium", "amount":50},{"item":"light_oil", "amount":30},{"item":"heavy_oil", "amount":30}],
+		"output2":[{"item":"petrolium", "amount":55},{"item":"light_oil", "amount":45},{"item":"heavy_oil", "amount":10}],
+		"output3":[{"item":"petrolium", "amount":20},{"item":"light_oil", "amount":15},{"item":"heavy_oil", "amount":10}],
+		"machine":{"type":"refinery","level":1},
+		"level":1,
+		"science":0
+	},
+	"light_oil":{
+		"craft_time":5,
+		"input1":[{"item":"crude_oil", "amount":100}],
+		"input2":[{"item":"crude_oil", "amount":100},{"item":"water", "amount":50}],
+		"input3":[{"item":"coal", "amount":10},{"item":"steam", "amount":50}],
+		"output1":[{"item":"light_oil", "amount":30},{"item":"petrolium", "amount":50},{"item":"heavy_oil", "amount":30}],
+		"output2":[{"item":"light_oil", "amount":45},{"item":"petrolium", "amount":55},{"item":"heavy_oil", "amount":10}],
+		"output3":[{"item":"light_oil", "amount":15},{"item":"petrolium", "amount":20},{"item":"heavy_oil", "amount":10}],
+		"machine":{"type":"refinery","level":1},
+		"level":1,
+		"science":0
+	},
+	"heavy_oil":{
+		"craft_time":5,
+		"input1":[{"item":"crude_oil", "amount":100}],
+		"input2":[{"item":"crude_oil", "amount":100},{"item":"water", "amount":50}],
+		"input3":[{"item":"coal", "amount":10},{"item":"steam", "amount":50}],
+		"output1":[{"item":"heavy_oil", "amount":30},{"item":"petrolium", "amount":50},{"item":"light_oil", "amount":30}],
+		"output2":[{"item":"heavy_oil", "amount":10},{"item":"petrolium", "amount":55},{"item":"light_oil", "amount":45}],
+		"output3":[{"item":"heavy_oil", "amount":10},{"item":"petrolium", "amount":20},{"item":"light_oil", "amount":15}],
+		"machine":{"type":"refinery","level":1},
+		"level":1,
+		"science":0
+	},
+	"plastic_bar":{
+		"craft_time":1,
+		"input":[{"item":"coal", "amount":1},{"item":"petrolium", "amount":20}],
+		"output":[{"item":"plastic_bar", "amount":2}],
+		"machine":{"type":"chemical_plant","level":1},
+		"level":2,
+		"science":0
+	},
+	"sulfur":{
+		"craft_time":1,
+		"input":[{"item":"petrolium", "amount":30},{"item":"water", "amount":30}],
+		"output":[{"item":"sulfur", "amount":2}],
+		"machine":{"type":"chemical_plant","level":1},
+		"level":2,
+		"science":0
+	},
+	"sulfuric_acid":{
+		"craft_time":1,
+		"input":[{"item":"water", "amount":100},{"item":"iron_plate", "amount":1},{"item":"sulfur", "amount":5}],
+		"output":[{"item":"sulfuric_acid", "amount":50}],
+		"machine":{"type":"chemical_plant","level":1},
+		"level":3,
+		"science":0
+	},
+	"speed_module":{
+		"craft_time":15,
+		"input":[{"item":"electronic_circuit", "amount":5},{"item":"advanced_electronic_circuit","amount":5}],
+		"output":[{"item":"speed_module", "amount":1}],
+		"machine":{"type":"assembling_machine","level":1},
+		"level":2,
+		"science":0
+	},
+	"speed_module_2":{
+		"craft_time":30,
+		"input":[{"item":"speed_module", "amount":4},{"item":"advanced_electronic_circuit","amount":5},{"item":"processing_unit","amount":5}],
+		"output":[{"item":"speed_module_2", "amount":1}],
+		"machine":{"type":"assembling_machine","level":2},
+		"level":2,
+		"science":0
+	},
+	"speed_module_3":{
+		"craft_time":60,
+		"input":[{"item":"speed_module_2", "amount":5},{"item":"advanced_electronic_circuit","amount":5},{"item":"processing_unit","amount":5}],
+		"output":[{"item":"speed_module_3", "amount":1}],
+		"machine":{"type":"assembling_machine","level":2},
+		"level":2,
+		"science":0
+	},
+	"rocket_control_unit":{
+		"craft_time":30,
+		"input":[{"item":"speed_module", "amount":1},{"item":"processing_unit","amount":1}],
+		"output":[{"item":"rocket_control_unit", "amount":1}],
+		"machine":{"type":"assembling_machine","level":1},
+		"level":2,
+		"science":0
+	},
+	"rocket_fuel":{
+		"craft_time":30,
+		"input":[{"item":"solid_fuel", "amount":10}],
+		"output":[{"item":"rocket_fuel", "amount":1}],
+		"machine":{"type":"assembling_machine","level":1},
+		"level":2,
+		"science":0
+	},
+	"low_density_structure":{
+		"craft_time":30,
+		"input":[{"item":"copper_plate", "amount":10},{"item":"steel","amount":5},{"item":"plastic","amount":5}],
+		"output":[{"item":"low_density_structure", "amount":1}],
+		"machine":{"type":"assembling_machine","level":1},
+		"level":2,
+		"science":0
+	}
+}
