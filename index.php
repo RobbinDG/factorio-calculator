@@ -30,26 +30,26 @@
 		<div id="frame" class="frame"></div><br>
 		<select id="assembling_machine" onchange="update()">
 			<option value="1">Level 1</option>
-			<option value="2">Level 2</option>
+			<option value="2" selected>Level 2</option>
 			<option value="3">Level 3</option>
 		</select>
 		<select id="furnace" onchange="update()">
 			<option value="1">Stone Furnace</option>
-			<option value="2">Steel Furnace</option>
+			<option value="2" selected>Steel Furnace</option>
 			<option value="3">Electric Furnace</option>
 		</select>
 		<select id="fuel" onchange="update()">
-			<option value="1">Coal</option>
+			<option value="1" selected>Coal</option>
 			<option value="2">Solid Fuel</option>
 			<option value="3">Rocket Fuel</option>
 			<option value="4">Nuclear Fuel</option>
 		</select>
 		<select id="mining_drill" onchange="update()">
 			<option value="1">Burner Mining Drill</option>
-			<option value="2">Electric Mining Drill</option>
+			<option value="2" selected>Electric Mining Drill</option>
 		</select>
 		<select id="refinery" onchange="update()">
-			<option value="1">Oil Processing</option>
+			<option value="1" selected>Oil Processing</option>
 			<option value="2">Advanced Oil Processing</option>
 			<option value="3">Coal Liquefaction</option>
 		</select>
