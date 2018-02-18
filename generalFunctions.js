@@ -75,3 +75,11 @@ function getOffsetTop( elem )
     } while( elem = elem.offsetParent );
     return offsetTop;
 }
+
+function pow(n, power){
+	var m = 1;
+	while(power--){
+		m *= n;
+	}
+	return m;
+}

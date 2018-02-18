@@ -36,6 +36,7 @@ function displayModuleSlots(machine, level, item){
 	// TODO: some items do not allow productivity modules
 	// TODO: remove module from machine if one is selected
 	var slotSize = 32, padding = 4, borderSize;
+	moduleSlotIds = [];
 	document.getElementById("modules").innerHTML = "";
 	document.getElementById("modules").style.height = 2*(slotSize+2) + 4*padding;
 	document.getElementById("modules").style.width = 2*(slotSize+2) + 4*padding;
@@ -55,6 +56,17 @@ function displayModuleSlots(machine, level, item){
 			moduleSlotIds.push(customDropdowns.length-1);
 		}
 	}
+	var c = decodeLocation(currentInEditor);
+	var n = craftTree[c[0]][c[1]];
+	var f = 8; m = n.modules;
+	for(var i = moduleSlotIds.length-1; i >= 0; --i){
+		if(m == 0) break;
+		while(pow(10, f) > m && m != 0){
+			f--;
+		}
+		CDDForceSelection(moduleSlotIds[i], f);
+		m -= pow(10,f);
+	}
 }
 
 function loadMachineEditor(machine, level, item, location){
@@ -71,29 +83,29 @@ function loadMachineEditor(machine, level, item, location){
 		op[i-1].disabled = true;
 	}
 	
-	// load module slots (functionality yet to be implemented)
+	// load module slots
 	displayModuleSlots(machine, level, item);
+
+	// load beacon slots
+
+}
+
+function openEditor(str){
+	var i = decodeLocation(str);
+	var data = craftTree[i[0]][i[1]];
+	document.getElementById("changeMachineIcon").innerHTML = document.getElementById(str).innerHTML;
+	loadMachineEditor(data.machine, data.level, data.item, str);
+	CDDCloseAll();
 }
 
 function saveChanges(){
 	var m = decodeLocation(currentInEditor);
 	var data = craftTree[m[0]][m[1]];
+	data.modules = 0;
 	for(var i = 0; i < moduleSlotIds.length; ++i){
 		dropdown = customDropdowns[moduleSlotIds[i]];
-		alert(dropdown.selectedEntry);
-		switch(dropdown.selectedEntry){
-			case 0: data.modules += 100000000; break;
-			case 1: data.modules += 10000000; break;
-			case 2: data.modules += 1000000; break;
-			case 3: data.modules += 100000; break;
-			case 4: data.modules += 10000; break;
-			case 5: data.modules += 1000; break;
-			case 6: data.modules += 100; break;
-			case 7: data.modules += 10; break;
-			case 8: data.modules += 1; break;
-			default: break;
+		if(dropdown.selectedEntry >= 0){
+			data.modules += pow(10, dropdown.selectedEntry);
 		}
 	}
-	alert(data.modules);
-
 }

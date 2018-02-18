@@ -67,11 +67,15 @@ function CDDCloseAll(){
 	}
 }
 
+function CDDForceSelection(id, optionId){
+	var dropdown = customDropdowns[id];
+	getCDDById(id).innerHTML = "<img src=\"../images/" + scoreToDash(dropdown.entryList[optionId]) + ".png\" style=\"width:" + dropdown.iconSize + "; height:" + dropdown.iconSize + ";\">";
+	customDropdowns[id].selectedEntry = optionId;
+}
+
 function CDDClickedMain(id){
 	var dropdownID = getCDDById(id);
 	var x = getOffsetLeft(dropdownID);
 	var y = getOffsetTop(dropdownID);
 	customDropdowns[id].opened ? CDDClose(id) : CDDOpen(id, x, y);
-	// temporary
-	// ~ "<div " style=\"width:" + maxWidth * size + "; visible: false\" class=\"customDropdownOptions\"></div>";
 }

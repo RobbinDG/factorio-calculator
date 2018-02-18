@@ -16,14 +16,6 @@ var pixelsPerBlock = 64;
 var requiredResources = create2DArray(itemLevelCount);
 var craftTree;
 
-function clicked(str){
-	var i = decodeLocation(str);
-	var data = craftTree[i[0]][i[1]];
-	document.getElementById("changeMachineIcon").innerHTML = document.getElementById(str).innerHTML;
-	loadMachineEditor(data.machine, data.level, data.item, str);
-	CDDCloseAll();
-}
-
 function printJSON(){
 	// prints the json string of recipes.json
 	var jsonString = JSON.stringify(recipes);
@@ -188,7 +180,7 @@ function displayDiagram(){
 			var left = (i == 0 ? center - leftmost : craftTree[i][j].position - leftmost) * pixelsPerBlock;
 			var top = 2 * i * pixelsPerBlock;
 			if((rightmost - leftmost)*pixelsPerBlock <= width){ left += (width-(rightmost-leftmost)*pixelsPerBlock)/2; }
-			document.getElementById("frame").innerHTML += "<div id=\"" + i + "-" + j + "\"class=\"machine\" onClick=\"clicked(\'" 
+			document.getElementById("frame").innerHTML += "<div id=\"" + i + "-" + j + "\"class=\"machine\" onClick=\"openEditor(\'" 
 			+ i + "-" + j + "\')\" style=\"left: " + left + "px; top: " + top + "px;\" ><center>" 
 			+ toReadable(craftTree[i][j].item) + "<br>" + toReadable(recipes[craftTree[i][j].item].machine.type) + " " 
 			+ Math.ceil(craftTree[i][j].machines) + "</center></div>";
