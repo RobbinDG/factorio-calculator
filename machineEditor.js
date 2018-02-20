@@ -147,5 +147,10 @@ function saveChanges(){
 			data.pollutionMult += mods[3];
 		}
 	}
+	document.getElementById("changeMachineIcon").innerHTML = "";
+	document.getElementById("changeMachineLevel").innerHTML = "";
+	document.getElementById("modules").innerHTML = "";
+	document.getElementById("beacons").innerHTML = "";
+	document.getElementById("beaconAmount").value = 0;
 	recalculate();
 }
