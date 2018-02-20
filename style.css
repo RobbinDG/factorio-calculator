@@ -29,6 +29,10 @@ input.amount {
 	width: 50px;
 }
 
+input.beaconAmount {
+	width: 50px;
+}
+
 div.input {
 	border: 2px solid black;
 	padding: 5px;

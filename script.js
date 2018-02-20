@@ -122,16 +122,20 @@ function gDR(itemF, amountF, depth, parentPos, parentIndexF, multiplier){
 		var nextMultiplier = reqAmount / productionQuantity * multiplier;
 		craftTree[depth].push({
 			item: reqItem, 
-			amount: reqAmount * multiplier, 
-			position: pos, parentIndex: parentIndexF, 
+			amount: reqAmount * multiplier,
+			multiplier: multiplier,
+			position: pos, 
+			parentIndex: parentIndexF, 
 			machines: machinesR,
 			machine: recipes[reqItem].machine.type,
 			level: correctedLevel,
 			modules: 0,
+			beacons: 0,
+			beaconCnt: 0,
 			speedMult:1,
 			productivityMult:1,
 			energyMult:1,
-			polutionMult:1
+			pollutionMult:1
 		});
 		if(craftTree[depth].length == 1){ leftmost = pos; }
 		while(craftTree[depth].length-1 > 0 && craftTree[depth][craftTree[depth].length-2].position + 1 >= craftTree[depth][craftTree[depth].length-1].position){
@@ -149,17 +153,20 @@ function generateDiagram(itemF, amountF){
 	craftTree = create2DArray(1);
 	craftTree[0][0] = {
 		item: itemF, 
-		amount: amountF, 
+		amount: amountF,
+		multiplier: 1,	
 		position: 0, 
 		parentIndex: -1, 
 		machines: machinesR,
 		machine: recipes[itemF].machine.type,
 		level: correctedLevel,
 		modules: 0,
+		beacons: 0,
+		beaconCnt: 0,
 		speedMult:1,
 		productivityMult:1,
 		energyMult:1,
-		polutionMult:1
+		pollutionMult:1
 	};
 	var objIO = craftExceptions(itemF);
 	var objectOutput = objIO[1];
@@ -187,6 +194,24 @@ function displayDiagram(){
 		}
 	}
 	document.getElementById("frame").scrollTo((center - leftmost) * pixelsPerBlock - (width + pixelsPerBlock)/2, 0);
+}
+
+function getProductivity(i, j){
+	if(i < 0){return 1;}
+	return craftTree[i][j].productivityMult * getProductivity(i-1, craftTree[i][j].parentIndex);
+}
+
+function recalculate(){
+	for(var i = 0; i < craftTree.length; ++i){
+		for(var j = 0; j < craftTree[i].length; ++j){
+			var d = craftTree[i][j];
+			var productionQuantity = craftExceptions(d.item)[1][0].amount;
+			var prodMult = getProductivity(i, j);
+			var machinesR = recipes[d.item].craft_time / getCraftSpeed(d.item) * d.amount / productionQuantity / d.speedMult / prodMult;
+			d.machines = machinesR;
+		}
+	}
+	displayDiagram();
 }
 
 function update(){

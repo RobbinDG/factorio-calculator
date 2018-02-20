@@ -22,6 +22,8 @@
 			</center></td>
 			<td><center>
 				<p>beacons</p>
+				<div id="beacons" class="modules"></div>
+				<input id="beaconAmount" class="beaconAmount" type="number" max="12" value="0"/>
 			</center></td>
 			</tr><tr><td colspan="3">
 				<center><button id="save_changes" onclick="saveChanges()">Save Changes</button></center>
