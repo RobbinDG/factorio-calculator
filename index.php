@@ -37,7 +37,7 @@
 		</select>
 		<select id="furnace" onchange="update()">
 			<option value="1">Stone Furnace</option>
-			<option value="2" selected>Steel Furnace</option>
+			<option value="2" selected>Steel rewrite Furnace</option>
 			<option value="3">Electric Furnace</option>
 		</select>
 		<select id="fuel" onchange="update()">
