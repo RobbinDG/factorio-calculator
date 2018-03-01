@@ -133,7 +133,7 @@ function generateDiagram(item, depth, craftMultiplier,
 		generateDiagram(child.item, depth+1, craftMultiplier * child.amount,
 		 i, path, y);
 		if(i == 0) left = y;
-		if(i == children-1) right == y;
+		if(i == children-1) right = y;
 	}
 	createNode(item, craftMultiplier, depth, (left + right)/2, path, parentRowIndex);
 }
