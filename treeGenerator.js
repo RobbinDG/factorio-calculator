@@ -81,7 +81,7 @@ function newPath(parentPath, i, depth){
 	return parentPath + (i+1)*Math.pow(10, depth);
 }
 
-function createNode(item, reqAmount, depth, path, parentRowIndex){
+function createNode(item, reqAmount, depth, position, path, parentRowIndex){
 	// Creates a node for internal use, and sets the appropriate data
 	// Path is sequence of indexes from child to child, lowest level
 	// 	in front
@@ -93,6 +93,7 @@ function createNode(item, reqAmount, depth, path, parentRowIndex){
 		item: item, 
 		amount: reqAmount,
 		path: path,
+		pos: position,
 		parentIndex: parentRowIndex, 
 		machines: machinesR,
 		machine: recipes[item].machine.type,
@@ -108,29 +109,33 @@ function createNode(item, reqAmount, depth, path, parentRowIndex){
 }
 
 function getChildren(item){
-	return recipes[item].input.length;
+	if(recipes[item].level == 0)
+		return 0;
+	return craftExceptions(item)[0].length;
 }
 
 function generateDiagram(item, depth, craftMultiplier, 
 	childIndex, parentPath, parentRowIndex){
 	// Internally generates an (2D-)array to store the diagram data
 	// Depth is in indexes, starting from 0
-	if(recipes[item].level == 0){
-		return;
-	}
 	if(craftTree.length == depth){
 		addRow(craftTree);
 	}
-	var path = newPath(parentPath, childIndex, depth);
-	createNode(item, craftMultiplier, depth, path, parentRowIndex);
 
+	var path = newPath(parentPath, childIndex, depth);
+	var left, right;
 	var children = getChildren(item);
 	for(var i = 0; i < children; ++i){
 		var child = craftExceptions(item)[0][i];
-		var rowIndex = parentRowIndex - (children-1) + 2*i;
+		var rowIndex = craftTree[depth].length; //node has yet to be added
+		var y = Math.max(parentRowIndex - (children-1) + 2*i, 
+			(rowIndex == 0 ? Number.MIN_SAVE_INTEGER : rowIndex));
 		generateDiagram(child.item, depth+1, craftMultiplier * child.amount,
-		 i, path, rowIndex);
+		 i, path, y);
+		if(i == 0) left = y;
+		if(i == children-1) right == y;
 	}
+	createNode(item, craftMultiplier, depth, (left + right)/2, path, parentRowIndex);
 }
 
 function displayDiagram(){
