@@ -1,31 +1,21 @@
 // MACROS
-var BLOCKSIZE = 32;
+var BLOCKSIZE = 64;
 
 // STRUCTURES
-var craftTree = create2DArray(1);
+var craftTree;
 var objectList = new Array();
 
 // GLOBALS
 var correctedLevel;
 
-function addBlock(item, machineCnt, machineType, location){
-	// Adds the block to the display and returns the block id/coordinates
-}
 
-function makeBlock(item, machineCnt, machineType, id){
+function makeBlock(object, depth, index, leftmost, leftCorrection){
 	// Returns string code for div that makes up the block
-}
-
-function shiftBranch(startId){
-	// shifts a branch from a startId to the right until the tree is correctly spaced
-}
-
-function shiftRight(id){
-	// Internally shifts the coordinate of a block 1 block to the right
-}
-
-function checkAndFixOverlap(/*something here*/){
-	// Checks if the given node overlaps with previous ones, and shifts it if needed
+	return "<div id=\"" + depth + "-" + index + "\" onClick=\"openEditor('" + 
+		depth + "-" + index + "')\" class=\"machine\" style=\"left: " +
+		((object.pos - leftmost)*BLOCKSIZE + leftCorrection )+ "; top: " + depth*2*BLOCKSIZE + ";\">" +
+		toReadable(object.item) + "<br>" + toReadable(object.machine) + " "
+		+ Math.ceil(object.machines) + "</div>";
 }
 
 function getCraftSpeed(item){
@@ -87,7 +77,7 @@ function createNode(item, reqAmount, depth, position, path, parentRowIndex){
 	// 	in front
 	// reqAmount = total amount required to be made (unaffected by the amount produced and modules)
 	var productionQuantity = craftExceptions(item)[1][0].amount;
-	var machinesR = recipes[item].craft_time / getCraftSpeed(reqItem) * reqAmount / productionQuantity;
+	var machinesR = recipes[item].craft_time / getCraftSpeed(item) * reqAmount / productionQuantity;
 
 	craftTree[depth].push({
 		item: item, 
@@ -114,8 +104,14 @@ function getChildren(item){
 	return craftExceptions(item)[0].length;
 }
 
+function clearDiagram(){
+	craftTree = "";
+	craftTree = create2DArray(1);
+	document.getElementById("frame").innerHTML = "";
+}
+
 function generateDiagram(item, depth, craftMultiplier, 
-	childIndex, parentPath, parentRowIndex){
+	childIndex, parentPath, parentRowIndex, parentPos){
 	// Internally generates an (2D-)array to store the diagram data
 	// Depth is in indexes, starting from 0
 	if(craftTree.length == depth){
@@ -123,27 +119,58 @@ function generateDiagram(item, depth, craftMultiplier,
 	}
 
 	var path = newPath(parentPath, childIndex, depth);
+	var rowIndex = craftTree[depth].length; //node has yet to be added
+	// left/right initially are the proposed position for THIS node
+	// they change later to adjust for the children
 	var left, right;
+	left = right = Math.max(parentPos, (rowIndex == 0 ? Number.MIN_SAFE_INTEGER : (craftTree[depth][rowIndex-1].pos + 2)));
 	var children = getChildren(item);
 	for(var i = 0; i < children; ++i){
 		var child = craftExceptions(item)[0][i];
-		var rowIndex = craftTree[depth].length; //node has yet to be added
-		var y = Math.max(parentRowIndex - (children-1) + 2*i, 
-			(rowIndex == 0 ? Number.MIN_SAVE_INTEGER : rowIndex));
-		generateDiagram(child.item, depth+1, craftMultiplier * child.amount,
-		 i, path, y);
-		if(i == 0) left = y;
-		if(i == children-1) right = y;
+		var p = generateDiagram(child.item, depth+1, craftMultiplier * child.amount,
+		 i, path, rowIndex, left);
+		if(i == 0) left = p;
+		if(i == children-1) right = p;
 	}
-	createNode(item, craftMultiplier, depth, (left + right)/2, path, parentRowIndex);
+	var pos = Math.ceil((left + right)/2);
+	createNode(item, craftMultiplier, depth, pos, path, parentRowIndex);
+	return pos;
+}
+
+function getLeftmost(){
+	var leftmost = Number.MAX_SAFE_INTEGER;
+	for(var i = 0; i < craftTree.length; ++i){
+		leftmost = Math.min(leftmost, craftTree[i][0].pos);
+	}
+	return leftmost;
+}
+
+function getRightmost(){
+	var rightmost = Number.MIN_SAFE_INTEGER;
+	for(var i = 0; i < craftTree.length; ++i){
+		rightmost = Math.max(rightmost, craftTree[i][craftTree[i].length-1].pos);
+	}
+	return rightmost;
 }
 
 function displayDiagram(){
 	// Renders the diagram to the screen
+	var leftmost = getLeftmost();
+	var rightmost = getRightmost();
+	var frame = document.getElementById("frame");
+	for(var i = 0; i < craftTree.length; ++i){
+		var leftCorrection = (frame.offsetWidth >= (rightmost+1)*BLOCKSIZE ? (frame.offsetWidth - (rightmost+1)*BLOCKSIZE)/2 : 0);
+		for(var j = 0; j < craftTree[i].length; ++j){
+			frame.innerHTML += makeBlock(craftTree[i][j], i, j, leftmost, leftCorrection);
+		}
+	}
+	if(frame.offsetWidth < (rightmost+1)*BLOCKSIZE)
+		frame.scrollTo((craftTree[0][0].pos - leftmost + 1/2)*BLOCKSIZE - frame.offsetWidth/2, 0);
 }
 
-function makeDiagram(){
+function makeDiagram(item, amount){
 	// Starts the generation process
-	generateDiagram();
+	clearDiagram();
+	generateDiagram(item, 0, amount, 0, 0, -1, 0);
 	displayDiagram();
 }

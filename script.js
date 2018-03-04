@@ -11,10 +11,8 @@ var recipes = {};
 var warnings = [];
 var itemLevelCount = 4;
 var padding = 16;
-var pixelsPerBlock = 64;
 // level 0: raw resources, 1: processed resources, 2: intermediate items, 3: processed intermediate items
-var requiredResources = create2DArray(itemLevelCount);
-var craftTree;
+var requiredResources = create2DArray(itemLevelCount)
 
 function printJSON(){
 	// prints the json string of recipes.json
@@ -107,95 +105,6 @@ function shiftBranch(depth, index){
 	}
 }
 
-function gDR(itemF, amountF, depth, parentPos, parentIndexF, multiplier){
-	if(recipes[itemF].level == 0){ return; }
-	if(craftTree.length < depth+1){ addRow(craftTree); }
-	var objIO = craftExceptions(itemF);
-	var objectInput = objIO[0], objectOutput = objIO[1];
-	var children = objectInput.length;
-	for(var i = 0; i < children; ++i){
-		var pos = parentPos - (children-1) + 2*i;
-		var reqItem = objectInput[i].item;
-		var reqAmount = objectInput[i].amount;
-		var productionQuantity = craftExceptions(reqItem)[1][0].amount;
-		var machinesR = recipes[reqItem].craft_time / getCraftSpeed(reqItem) * reqAmount / productionQuantity * multiplier;
-		var nextMultiplier = reqAmount / productionQuantity * multiplier;
-		craftTree[depth].push({
-			item: reqItem, 
-			amount: reqAmount * multiplier,
-			multiplier: multiplier,
-			position: pos, 
-			parentIndex: parentIndexF, 
-			machines: machinesR,
-			machine: recipes[reqItem].machine.type,
-			level: correctedLevel,
-			modules: 0,
-			beacons: 0,
-			beaconCnt: 0,
-			speedMult:1,
-			productivityMult:1,
-			energyMult:1,
-			pollutionMult:1
-		});
-		if(craftTree[depth].length == 1){ leftmost = pos; }
-		while(craftTree[depth].length-1 > 0 && craftTree[depth][craftTree[depth].length-2].position + 1 >= craftTree[depth][craftTree[depth].length-1].position){
-			shiftBranch(depth, craftTree[depth].length-1);
-			shifts++;
-		}
-		gDR(reqItem, reqAmount, depth+1, craftTree[depth][craftTree[depth].length-1].position, craftTree[depth].length-1, nextMultiplier);
-	}
-}
-
-function generateDiagram(itemF, amountF){
-	var machinesR = recipes[itemF].craft_time * amountF / getCraftSpeed(itemF);
-	shifts = 0;
-	craftTree = 0;
-	craftTree = create2DArray(1);
-	craftTree[0][0] = {
-		item: itemF, 
-		amount: amountF,
-		multiplier: 1,	
-		position: 0, 
-		parentIndex: -1, 
-		machines: machinesR,
-		machine: recipes[itemF].machine.type,
-		level: correctedLevel,
-		modules: 0,
-		beacons: 0,
-		beaconCnt: 0,
-		speedMult:1,
-		productivityMult:1,
-		energyMult:1,
-		pollutionMult:1
-	};
-	var objIO = craftExceptions(itemF);
-	var objectOutput = objIO[1];
-	gDR(itemF, amountF, 1, 0, 0, amountF / objectOutput[0].amount);
-}
-
-function displayDiagram(){
-	document.getElementById("frame").innerHTML = "";
-	var width = document.getElementById("frame").offsetWidth;
-	var center = (craftTree.length > 1 ? (craftTree[1][0].position + craftTree[1][craftTree[1].length-1].position)/2 : 0);
-	var leftmost = 0, rightmost = 0;
-	for(var i = 0; i < craftTree.length; ++i){
-		for(var j = 0; j < craftTree[i].length; ++j){
-			for(var n = 0; n < craftTree.length; ++n){
-				if(craftTree[n][0].position < leftmost) { leftmost = craftTree[n][0].position; }
-				if(craftTree[n][craftTree[n].length-1].position > rightmost) { rightmost = craftTree[n][craftTree[n].length-1].position; }
-			}
-			var left = (i == 0 ? center - leftmost : craftTree[i][j].position - leftmost) * pixelsPerBlock;
-			var top = 2 * i * pixelsPerBlock;
-			if((rightmost - leftmost)*pixelsPerBlock <= width){ left += (width-(rightmost-leftmost)*pixelsPerBlock)/2; }
-			document.getElementById("frame").innerHTML += "<div id=\"" + i + "-" + j + "\"class=\"machine\" onClick=\"openEditor(\'" 
-			+ i + "-" + j + "\')\" style=\"left: " + left + "px; top: " + top + "px;\" ><center>" 
-			+ toReadable(craftTree[i][j].item) + "<br>" + toReadable(recipes[craftTree[i][j].item].machine.type) + " " 
-			+ Math.ceil(craftTree[i][j].machines) + "</center></div>";
-		}
-	}
-	document.getElementById("frame").scrollTo((center - leftmost) * pixelsPerBlock - (width + pixelsPerBlock)/2, 0);
-}
-
 function getProductivity(i, j){
 	if(i < 0){return 1;}
 	return craftTree[i][j].productivityMult * getProductivity(i-1, craftTree[i][j].parentIndex);
@@ -221,9 +130,7 @@ function update(){
 	warnings.fill(0);
 	//showRequirements(value, document.getElementById("amount").value);
 	document.getElementById("readyState").innerHTML = "Generating Diagram";	
-	generateDiagram(value, document.getElementById("amount").value);
-	document.getElementById("readyState").innerHTML = "Rendering Diagram";
-	displayDiagram();
+	makeDiagram(value, document.getElementById("amount").value);
 	document.getElementById("readyState").innerHTML = "Finding Warnings";
 	displayWarnings();
 	document.getElementById("readyState").innerHTML = "Ready";
