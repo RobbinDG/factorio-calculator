@@ -1,5 +1,6 @@
 var currentInEditor = "";
 var moduleSlotIds = new Array();
+var beaconSlotIds = new Array();
 
 function getModuleCapacity(machine, level){
 	machine += level;
@@ -97,6 +98,18 @@ function displayBeacons(){
 	document.getElementById("beacons").innerHTML += customDropdownInit(slotSize + 3*bPadding, bPadding, slotSize, 3);
 	addModuleListToDropdown(customDropdowns.length-1, "beacon");
 	beaconSlotIds.push(customDropdowns.length-1);
+	// load modules
+	var c = decodeLocation(currentInEditor);
+	var n = craftTree[c[0]][c[1]];
+	var f = 8; m = n.beacons;
+	for(var i = beaconSlotIds.length-1; i >= 0; --i){
+		if(m == 0) break;
+		while(pow(10, f) > m && m != 0){
+			f--;
+		}
+		CDDForceSelection(beaconSlotIds[i], f);
+		m -= pow(10,f);
+	}
 }
 
 function loadMachineEditor(machine, level, item, location){
@@ -136,10 +149,21 @@ function saveChanges(){
 	data.productivityMult = 1;
 	data.energyMult = 1;
 	data.pollutionMult = 1;
+	data.beaconCnt = Number(document.getElementById("beaconAmount").innerHTML);
 	for(var i = 0; i < moduleSlotIds.length; ++i){
 		dropdown = customDropdowns[moduleSlotIds[i]];
 		if(dropdown.selectedEntry >= 0){
 			data.modules += pow(10, dropdown.selectedEntry);
+			var mods = getMultiplierModifications(dropdown.selectedEntry);
+			data.speedMult += mods[0] * data.beaconCnt/2;
+			data.energyMult += mods[2] * data.beaconCnt/2;
+			data.pollutionMult += mods[3] * data.beaconCnt/2;
+		}
+	}
+	for(var i = 0; i < 2; ++i){
+		dropdown = customDropdowns[beaconSlotIds[i]];
+		if(dropdown.selectedEntry >= 0){
+			data.beacons += pow(10, dropdown.selectedEntry);
 			var mods = getMultiplierModifications(dropdown.selectedEntry);
 			data.speedMult += mods[0];
 			data.productivityMult += mods[1];
@@ -148,7 +172,7 @@ function saveChanges(){
 		}
 	}
 	document.getElementById("changeMachineIcon").innerHTML = "";
-	document.getElementById("changeMachineLevel").innerHTML = "";
+	document.getElementById("changeMachineLevel").innerHTML = "<option>No Options</option>";
 	document.getElementById("modules").innerHTML = "";
 	document.getElementById("beacons").innerHTML = "";
 	document.getElementById("beaconAmount").value = 0;
