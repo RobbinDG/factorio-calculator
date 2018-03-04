@@ -2,7 +2,7 @@
 	<head>
 		<title>Test</title>
 		<link rel="stylesheet" type="text/css" href="style.css">
-		 <!-- <script scr="jquery-3.3.1.min.js"></script> -->
+		 <!-- <script scr="html2canvas.min.js"></script> -->
 	</head>
 	<body>
 		<div class="input">
@@ -65,5 +65,6 @@
 		<script src="machineEditor.js"></script>
 		<script src="treeGenerator.js"></script>
 		<script src="script.js"></script>
+		
 	</body>
 </html>
